@@ -2,7 +2,7 @@ package binary_search
 
 const NotFoundIndex = -1
 
-func BinarySearch(list []int, searchedItem int) (int, bool) {
+func Search(list []int, searchedItem int) (int, bool) {
 	low := 0
 	high := len(list) - 1
 

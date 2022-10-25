@@ -19,7 +19,7 @@ type TestCase struct {
 	expectedFlag bool
 }
 
-func TestBinarySearch(t *testing.T) {
+func TestSearch(t *testing.T) {
 	var tests []TestCase
 
 	for _, size := range [4]int{549, 557, 3, 456} {
@@ -28,12 +28,12 @@ func TestBinarySearch(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotResult, gotResultFlag := BinarySearch(tt.args.list, tt.args.searchedItem)
+			gotResult, gotResultFlag := Search(tt.args.list, tt.args.searchedItem)
 			if gotResult != tt.expected {
-				t.Errorf("BinarySearch() gotResult = %v, expected %v", gotResult, tt.expected)
+				t.Errorf("Search() gotResult = %v, expected %v", gotResult, tt.expected)
 			}
 			if gotResultFlag != tt.expectedFlag {
-				t.Errorf("BinarySearch() gotResultFlag = %v, expected %v", gotResultFlag, tt.expectedFlag)
+				t.Errorf("Search() gotResultFlag = %v, expected %v", gotResultFlag, tt.expectedFlag)
 			}
 		})
 	}
@@ -61,7 +61,7 @@ func makeTestCase(size int) TestCase {
 	}
 }
 
-func TestBinarySearch1(t *testing.T) {
+func TestSearchNotFound(t *testing.T) {
 	var tests []TestCase
 
 	for _, size := range [4]int{64, 957, 236, 6947} {
@@ -70,12 +70,12 @@ func TestBinarySearch1(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotResult, gotExpectedFlag := BinarySearch(tt.args.list, tt.args.searchedItem)
+			gotResult, gotExpectedFlag := Search(tt.args.list, tt.args.searchedItem)
 			if gotResult != tt.expected {
-				t.Errorf("BinarySearch() gotResult = %v, want %v", gotResult, tt.expected)
+				t.Errorf("Search() gotResult = %v, want %v", gotResult, tt.expected)
 			}
 			if gotExpectedFlag != tt.expectedFlag {
-				t.Errorf("BinarySearch() gotExpectedFlag = %v, want %v", gotExpectedFlag, tt.expectedFlag)
+				t.Errorf("Search() gotExpectedFlag = %v, want %v", gotExpectedFlag, tt.expectedFlag)
 			}
 		})
 	}
