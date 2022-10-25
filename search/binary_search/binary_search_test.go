@@ -1,95 +1,102 @@
 package binary_search
 
 import (
+	"fmt"
 	"math/rand"
 	"sort"
 	"testing"
 )
 
-const NOT_FOUND_INDEX_VALUE = -1
+type args struct {
+	list         []int
+	searchedItem int
+}
 
-type BinarySearchCase struct {
-	ItemList      []int
-	Searched      int
-	ExpectedValue int
+type TestCase struct {
+	name         string
+	args         args
+	expected     int
+	expectedFlag bool
 }
 
 func TestBinarySearch(t *testing.T) {
-	testCasesItemListSize := [4]int{45, 68, 110, 190}
+	var tests []TestCase
 
-	var caseList []BinarySearchCase
-
-	for _, size := range testCasesItemListSize {
-		caseList = append(caseList, makeItemList(size))
+	for _, size := range [4]int{549, 557, 3, 456} {
+		tests = append(tests, makeTestCase(size))
 	}
 
-	for _, testCase := range caseList {
-		result, findFlag := BinarySearch(testCase.ItemList, testCase.Searched)
-
-		if findFlag != true {
-			t.Errorf("value [%d] not found", testCase.Searched)
-		}
-
-		if result != testCase.ExpectedValue {
-			t.Errorf("value should be [%d], but got [%d]", testCase.ExpectedValue, result)
-		}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotResult, gotResultFlag := BinarySearch(tt.args.list, tt.args.searchedItem)
+			if gotResult != tt.expected {
+				t.Errorf("BinarySearch() gotResult = %v, expected %v", gotResult, tt.expected)
+			}
+			if gotResultFlag != tt.expectedFlag {
+				t.Errorf("BinarySearch() gotResultFlag = %v, expected %v", gotResultFlag, tt.expectedFlag)
+			}
+		})
 	}
 }
 
-func TestBinarySearchNotFound(t *testing.T) {
-	testCasesItemListSize := [2]int{67, 126}
-
-	var caseList []BinarySearchCase
-
-	for _, size := range testCasesItemListSize {
-		caseList = append(caseList, makeItemListNorFound(size))
-	}
-
-	for _, testCase := range caseList {
-		result, findFlag := BinarySearch(testCase.ItemList, testCase.Searched)
-
-		if findFlag != false {
-			t.Errorf("value [%d] found", testCase.Searched)
-		}
-
-		if result != testCase.ExpectedValue {
-			t.Errorf("value should be [%d], but got [%d]", testCase.ExpectedValue, result)
-		}
-	}
-}
-
-func makeItemList(itemListSize int) BinarySearchCase {
+func makeTestCase(size int) TestCase {
 	var itemList []int
 
-	for i := 0; i < itemListSize; i++ {
+	for i := 0; i < size; i++ {
 		itemList = append(itemList, rand.Int())
 	}
 
 	sort.Ints(itemList)
 
-	searchedIndex := rand.Intn(itemListSize)
+	searchedIndex := rand.Intn(size)
 
-	return BinarySearchCase{
-		ItemList:      itemList,
-		Searched:      itemList[searchedIndex],
-		ExpectedValue: searchedIndex,
+	return TestCase{
+		name: fmt.Sprintf("test case with [%d] items", size),
+		args: args{
+			list:         itemList,
+			searchedItem: itemList[searchedIndex],
+		},
+		expected:     searchedIndex,
+		expectedFlag: true,
 	}
 }
 
-func makeItemListNorFound(itemListSize int) BinarySearchCase {
+func TestBinarySearch1(t *testing.T) {
+	var tests []TestCase
+
+	for _, size := range [4]int{64, 957, 236, 6947} {
+		tests = append(tests, makeTestCaseNotFound(size))
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotResult, gotExpectedFlag := BinarySearch(tt.args.list, tt.args.searchedItem)
+			if gotResult != tt.expected {
+				t.Errorf("BinarySearch() gotResult = %v, want %v", gotResult, tt.expected)
+			}
+			if gotExpectedFlag != tt.expectedFlag {
+				t.Errorf("BinarySearch() gotExpectedFlag = %v, want %v", gotExpectedFlag, tt.expectedFlag)
+			}
+		})
+	}
+}
+
+func makeTestCaseNotFound(size int) TestCase {
 	var itemList []int
 
-	for i := 0; i < itemListSize; i++ {
+	for i := 0; i < size; i++ {
 		itemList = append(itemList, rand.Int())
 	}
 
 	sort.Ints(itemList)
 
-	searchedIndex := rand.Intn(itemListSize)
-
-	return BinarySearchCase{
-		ItemList:      itemList,
-		Searched:      itemList[searchedIndex] * -1,
-		ExpectedValue: NOT_FOUND_INDEX_VALUE,
+	return TestCase{
+		name: fmt.Sprintf("not found test case with [%d] items", size),
+		args: args{
+			list:         itemList,
+			searchedItem: rand.Int() * -1,
+		},
+		expected:     NotFoundIndex,
+		expectedFlag: false,
 	}
 }
