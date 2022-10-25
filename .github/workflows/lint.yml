@@ -1,0 +1,26 @@
+---
+name: Lint
+'on':
+  push:
+
+jobs:
+  lint:
+    name: GoLang Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the codebase
+        uses: actions/checkout@v3
+
+      - name: Setup GoLang
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Golang CI lint
+        uses: golangci/golangci-lint-action@v3
+
+      - name: Run StaticCheck
+        uses: dominikh/staticcheck-action@v1.2.0
+        with:
+          install-go: false
