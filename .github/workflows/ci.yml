@@ -41,5 +41,5 @@ jobs:
         with:
           go-version: 1.19
 
-      - nane: Run unit tests
+      - name: Run unit tests
         run: make unit-tests
