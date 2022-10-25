@@ -1,7 +1,7 @@
 package selection_sort
 
 func Sort(itemList []int) []int {
-	for i := range itemList {
+	for i, value := range itemList {
 		minimumIndex := i
 
 		for j := minimumIndex + 1; j < len(itemList); j++ {
@@ -11,9 +11,8 @@ func Sort(itemList []int) []int {
 		}
 
 		if minimumIndex != i {
-			minimumValue := itemList[minimumIndex]
-			itemList[minimumIndex] = itemList[i]
-			itemList[i] = minimumValue
+			itemList[i] = itemList[minimumIndex]
+			itemList[minimumIndex] = value
 		}
 	}
 
